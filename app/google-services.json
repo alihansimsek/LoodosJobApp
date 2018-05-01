@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1006922739082",
+    "firebase_url": "https://loodos-brem.firebaseio.com",
+    "project_id": "loodos-brem",
+    "storage_bucket": "loodos-brem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006922739082:android:49e5da15aaa36aa5",
+        "android_client_info": {
+          "package_name": "com.example.alihan.loodosjobapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006922739082-0tkh03nlkiem7cbgr4hbu0aj4tinr45t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alihan.loodosjobapp",
+            "certificate_hash": "c44949d52e59123664c8643199cebc3859aa3b1e"
+          }
+        },
+        {
+          "client_id": "1006922739082-svan7tm337hp5kdp3160pf66vk0d78i2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0r8IOvBT6-tNtDZSFltojVqYhnDW_4Z0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006922739082-svan7tm337hp5kdp3160pf66vk0d78i2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
