@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         searchBar = findViewById(R.id.searchBar);
         spinner.setVisibility(View.GONE);
 
-
     }
 
     @Override
@@ -57,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {                           //check searchbar, execute asynchtask, log search
+
+                if(!searchBar.getText().equals("")){
                 new omdbConnector().execute("http://www.omdbapi.com/?s=" + searchBar.getText() + "&apikey=bf2b2d50");
 
                 Bundle bundle = new Bundle();                                       //firebase search log
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle);
 
                 searchBar.setText("");
+                }
             }
         });
         movieList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -73,27 +75,27 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = movieList.getItemAtPosition(position);
                 MovieModel movie = (MovieModel) o;
-                Intent intent = new Intent(getBaseContext(), MovieDetails.class);
-                intent.putExtra("movieID", movie.getId());
 
                 Bundle bundle = new Bundle();                                       //firebase movie click log
                 bundle.putString(FirebaseAnalytics.Param.METHOD, "List View");
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, movie.getName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
+                Intent intent = new Intent(getBaseContext(), MovieDetails.class);   //start next activity with movieID
+                intent.putExtra("movieID", movie.getId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
 
     }
 
-    class omdbConnector extends AsyncTask<String, Void, JSONObject> {
-
+    public class omdbConnector extends AsyncTask<String, Void, JSONObject> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            spinner.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.VISIBLE);    //Spinner display
         }
 
         @Override
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             super.onPostExecute(result);
 
-            spinner.setVisibility(View.GONE);
+            spinner.setVisibility(View.GONE);       //Spinner end
 
             if (result != null) {
                 try {
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                         JSONArray jarr = result.getJSONArray("Search");
 
                         movies = new ArrayList<>();
-                        for (int x = 0; x < jarr.length(); x++) {
+                        for (int x = 0; x < jarr.length(); x++) {               //fills ArrayList with movie names from JSONArray
                             movies.add(new MovieModel(jarr.getJSONObject(x).getString("Title"),
                                     jarr.getJSONObject(x).getString("imdbID")));
                         }

@@ -1,14 +1,11 @@
 package com.example.alihan.loodosjobapp;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.EditText;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,36 +24,29 @@ public class MovieDetails extends AppCompatActivity {
 
     TextView title, director, writer, plot, year, actors, runtime, rating, genre;
     String title_str, director_str, writer_str, plot_str, year_str, actors_str, runtime_str, rating_str, genre_str;
+    Bitmap logo;
     ImageView poster;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
         String data = getIntent().getExtras().getString("movieID");
-        title = findViewById(R.id.m_title);
-        director = findViewById(R.id.m_director);
-        writer = findViewById(R.id.m_writer);
-        plot = findViewById(R.id.m_plot);
-        year = findViewById(R.id.m_year);
-        actors = findViewById(R.id.m_actors);
-        runtime = findViewById(R.id.m_runtime);
-        rating = findViewById(R.id.m_rating);
-        genre = findViewById(R.id.m_genre);
-        poster = findViewById(R.id.m_poster);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         new omdbMovie().execute("http://www.omdbapi.com/?i=" + data + "&apikey=bf2b2d50");
-        }
+
+    }
 
     private class omdbMovie extends AsyncTask<String, Void, JSONObject> {
 
         @Override
         protected JSONObject doInBackground(String... urls) {
+
+
             String answer;
 
             try {
@@ -74,12 +64,12 @@ public class MovieDetails extends AppCompatActivity {
                     JSONObject obj = new JSONObject(stringBuilder.toString());
 
                     try {
+
                         String imageURL = obj.getString("Poster");
                         InputStream is = new URL(imageURL).openStream();
-                        Bitmap logo = BitmapFactory.decodeStream(is);
-                        poster.setImageBitmap(logo);
-                    }
-                    catch (Exception ex) {
+                        logo = BitmapFactory.decodeStream(is);
+
+                    } catch (Exception ex) {
                     }
 
                     return obj;
@@ -104,15 +94,29 @@ public class MovieDetails extends AppCompatActivity {
                     String status = result.getString("Response");
 
                     if (status.equals("True")) {
-                        title_str=result.getString("Title");
-                        year_str=result.getString("Year");
-                        runtime_str=result.getString("Runtime");
-                        genre_str=result.getString("Genre");
-                        director_str=result.getString("Director");
-                        writer_str=result.getString("Writer");
-                        actors_str=result.getString("Actors");
-                        plot_str=result.getString("Plot");
-                        rating_str=result.getString("imdbRating");
+
+                        title = findViewById(R.id.m_title);
+                        director = findViewById(R.id.m_director);
+                        writer = findViewById(R.id.m_writer);
+                        plot = findViewById(R.id.m_plot);
+                        year = findViewById(R.id.m_year);
+                        actors = findViewById(R.id.m_actors);
+                        runtime = findViewById(R.id.m_runtime);
+                        rating = findViewById(R.id.m_rating);
+                        genre = findViewById(R.id.m_genre);
+                        poster = findViewById(R.id.m_poster);
+
+                        poster.setImageBitmap(logo);
+
+                        title_str = result.getString("Title");
+                        year_str = result.getString("Year");
+                        runtime_str = result.getString("Runtime");
+                        genre_str = result.getString("Genre");
+                        director_str = result.getString("Director");
+                        writer_str = result.getString("Writer");
+                        actors_str = result.getString("Actors");
+                        plot_str = result.getString("Plot");
+                        rating_str = result.getString("imdbRating");
 
                         title.setText(title_str);
                         year.setText("Year: " + year_str);
@@ -137,8 +141,7 @@ public class MovieDetails extends AppCompatActivity {
                         mFirebaseAnalytics.logEvent("Viewed_Movies", params);
 
 
-                    }
-                    else {
+                    } else {
                         Toast.makeText(MovieDetails.this, "This was not supposed to happen", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
@@ -149,5 +152,14 @@ public class MovieDetails extends AppCompatActivity {
             }
 
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)   //finishes activity when back button touched
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
