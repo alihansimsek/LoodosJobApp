@@ -1,7 +1,7 @@
 package com.example.alihan.loodosjobapp;
 
 public class MovieModel {
-    String name, year, id, plot;
+    String name, id;
 
 
     MovieModel(String name, String id) {
@@ -18,16 +18,9 @@ public class MovieModel {
         return name;
     }
 
-    public String getYear() {
-        return year;
-    }
-
     public String getId() {
         return id;
     }
 
-    public String getPlot() {
-        return plot;
-    }
 
 }
